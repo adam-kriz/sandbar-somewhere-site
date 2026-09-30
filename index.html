@@ -172,10 +172,13 @@
   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--lagoon);box-shadow:0 0 0 3px rgba(39,163,163,.18)}
   .field .hint{font-size:.76rem;color:var(--muted);margin-top:3px}
   .field .err{font-size:.8rem;color:#b3261e;margin-top:5px;display:none}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+  .row2>.field{min-width:0}
   .row-trip{grid-template-columns:repeat(auto-fit,minmax(0,1fr))}
   .lbl-hint{font-weight:500;color:var(--muted)}
   .field input,.field select{min-width:0}
+  .field input[type=date]{-webkit-appearance:none;appearance:none;display:block;max-width:100%;text-align:left}
+  .field input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
   .field select{padding-top:0;padding-bottom:0;line-height:normal}
   .stepper{display:flex;align-items:center;height:42px;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--white)}
   .stepper button{width:42px;height:40px;border:0;background:transparent;font-size:1.3rem;cursor:pointer;color:var(--sea)}
