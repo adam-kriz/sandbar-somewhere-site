@@ -13,7 +13,7 @@
     --sea:#0b5d6b; --sea-deep:#063f4a; --lagoon:#27a3a3; --shallow:#9fe0d6;
     --sand:#f6ecd9; --sand-2:#efe0c2; --coral:#e8744f; --coral-dk:#c85a37;
     --ink:#10262b; --muted:#56696c; --line:#e3d6bb; --white:#fffdf8;
-    --radius:18px; --shadow:0 12px 32px -14px rgba(6,63,74,.35);
+    --radius:18px; --shadow:0 12px 32px -14px rgba(6,63,74,.35); --nav-h:71px;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -157,7 +157,9 @@
   .review footer b{color:var(--ink);display:block}
 
   /* booking */
-  .book{background:linear-gradient(180deg,var(--white) 0%,var(--sand) 100%);padding-top:40px}
+  .book{background:linear-gradient(180deg,var(--white) 0%,var(--sand) 100%);padding:48px 0;min-height:calc(100vh - var(--nav-h));display:flex;flex-direction:column;justify-content:center}
+  .book>.wrap{width:100%}
+  #trips{padding-bottom:40px}
   .book-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:56px;align-items:start}
   .why-direct{list-style:none;padding:0;margin:26px 0}
   .why-direct li{display:flex;gap:14px;margin-bottom:18px}
@@ -713,6 +715,23 @@
     $('menuBtn').setAttribute('aria-expanded',open);
   });
   document.querySelectorAll('#navLinks a').forEach(a=>a.addEventListener('click',()=>$('navLinks').classList.remove('open')));
+
+  // Book buttons: centre the form on screen, but keep the view inside the booking section
+  // so nothing from the trips section (above) or the captains section (below) shows
+  function scrollToBooking(behavior){
+    const navH = nav.offsetHeight, room = innerHeight - navH;
+    const sec = $('book').getBoundingClientRect(), form = $('bookForm').getBoundingClientRect();
+    const secTop = scrollY + sec.top - navH;          // section top meets the menu
+    const secEnd = secTop + sec.height - room;        // section bottom meets the screen bottom
+    const centred = scrollY + form.top - navH - Math.max(12, (room - form.height) / 2);
+    scrollTo({top: Math.max(secTop, Math.min(centred, secEnd)), behavior});
+  }
+  document.querySelectorAll('a[href="#bookForm"]').forEach(a=>a.addEventListener('click',e=>{
+    e.preventDefault();
+    scrollToBooking('smooth');
+    history.replaceState(null, '', '#bookForm');
+  }));
+  if (location.hash === '#bookForm') addEventListener('load', () => scrollToBooking('instant'));
 
   // trip buttons preselect
   document.querySelectorAll('[data-trip]').forEach(b=>b.addEventListener('click',()=>{ $('trip').value=b.dataset.trip; update(); }));
